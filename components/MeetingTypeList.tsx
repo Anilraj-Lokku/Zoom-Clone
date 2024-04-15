@@ -9,12 +9,13 @@ import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useToast } from "@/components/ui/use-toast";
 import { Textarea } from "./ui/textarea";
+import { Input } from "./ui/input";
 
 const MeetingTypeList = () => {
  const router = useRouter();
  const [meetingState, setMeetingState] = useState<
   "isScheduleMeeting" | "isJoiningMeeting" | "isInstantMeeting" | undefined
- >();
+ >(undefined);
  const { user } = useUser();
  const client = useStreamVideoClient();
  const [values, setValues] = useState({
@@ -91,14 +92,14 @@ const MeetingTypeList = () => {
     img="/icons/recordings.svg"
     title="View Recordings"
     description="Checout missed recordings"
-    handleClick={() => setMeetingState("isJoiningMeeting")}
+    handleClick={() => router.push("/recordings")}
     className="bg-purple-1"
    />
    <HomeCard
     img="/icons/join-meeting.svg"
     title="Join Meeting"
     description="Join meeting via invitation link"
-    handleClick={() => router.push("/recordings")}
+    handleClick={() => setMeetingState("isJoiningMeeting")}
     className="bg-yellow-1"
    />
 
@@ -157,6 +158,20 @@ const MeetingTypeList = () => {
     buttonText="Start Meeting"
     handleClick={createMeeting}
    />
+   <MeetingModel
+    isOpen={meetingState === "isJoiningMeeting"}
+    onClose={() => setMeetingState(undefined)}
+    title="Type the link here"
+    className="text-center"
+    buttonText="Join Meeting"
+    handleClick={() => router.push(values.link)}
+   >
+    <Input
+     placeholder="Meeting link"
+     onChange={(e) => setValues({ ...values, link: e.target.value })}
+     className="border-none bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+    />
+   </MeetingModel>
   </section>
  );
 };

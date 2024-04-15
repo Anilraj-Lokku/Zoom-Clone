@@ -5,7 +5,7 @@ const Upcoming = () => {
  return (
   <section className="flex size-full flex-col gap-5 text-white">
    <h1 className="text-3xl font-bold">UpComing Meetings</h1>
-   <CallList type="ended" />
+   <CallList type="upcoming" />
   </section>
  );
 };
